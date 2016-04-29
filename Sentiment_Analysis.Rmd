@@ -1,0 +1,57 @@
+---
+title: "Jane_Austen_Sentiment"
+author: "Winston Saunders"
+date: "April 28, 2016"
+output: html_document
+---
+
+```{r, "load jane austen text", include=FALSE}
+
+
+library(devtools)
+if ( !("janeaustenr" %in% installed.packages()) ) install_github("juliasilge/janeaustenr")
+library(janeaustenr)
+
+```
+
+```{r, "load libraries and data", echo=FALSE}
+
+
+
+library(dplyr)
+library(stringr)
+library(syuzhet)
+library(ggplot2)
+library(viridis)
+data(sensesensibility)
+data(prideprejudice)
+data(mansfieldpark)
+data(emma)
+data(northangerabbey)
+data(persuasion)
+
+```
+
+```{r}
+
+
+process_sentiment <- function (rawtext, mymethod) {
+        chunkedtext <- data_frame(x = rawtext) %>% 
+                group_by(linenumber = ceiling(row_number() / 10)) %>% 
+                summarize(text = str_c(x, collapse = " "))
+        mySentiment <- data.frame(cbind(linenumber = chunkedtext$linenumber, 
+                                   sentiment = get_sentiment(chunkedtext$text, method = mymethod)))
+}
+
+```
+
+
+```{r}
+
+SandS <- rbind(process_sentiment(sensesensibility,"afinn") %>% mutate(method = "AFINN"),
+               process_sentiment(sensesensibility,"bing") %>% mutate(method = "Bing et al"),
+               process_sentiment(sensesensibility,"nrc") %>% mutate(method = "NRC") )
+
+
+```
+
