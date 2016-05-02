@@ -1,11 +1,14 @@
 ---
 title: "Jane_Austen_Sentiment"
 author: "Winston Saunders"
-date: "April 28, 2016"
+date: "May 2016"
 output: html_document
+
 ---
 
-```{r, "load jane austen text", include=FALSE}
+##Get Data
+
+```{r, "load jane austen text", echo=FALSE}
 
 
 library(devtools)
@@ -32,7 +35,7 @@ data(persuasion)
 
 ```
 
-```{r}
+```{r, "functional wrapper for get_sentiment"}
 
 
 process_sentiment <- function (rawtext, mymethod) {
@@ -45,8 +48,7 @@ process_sentiment <- function (rawtext, mymethod) {
 
 ```
 
-
-```{r}
+```{r, "process using different methods"}
 
 SandS <- rbind(process_sentiment(sensesensibility,"afinn") %>% mutate(method = "AFINN"),
                process_sentiment(sensesensibility,"bing") %>% mutate(method = "Bing et al"),
@@ -55,8 +57,9 @@ SandS <- rbind(process_sentiment(sensesensibility,"afinn") %>% mutate(method = "
 
 ```
 
+##Different Sentiment Methods _Sense And Sensibility_
 
-```{r}
+```{r, "plot different methods", fig.align='center', fig.height=4, fig.width=8}
 
 caption <- "Text sourced from Project Gutenberg"
 annotatetext <- data.frame(x = c(108, 484, 851, 1005), y = rep(19.3, 4), 
@@ -90,7 +93,7 @@ ggplot(data = SandS, aes(x = linenumber, y = sentiment, fill = method)) +
 
 ```
 
-```{r, "define plotting function", echo=FALSE}
+```{r, "define general plotting function", echo=FALSE}
 
 plot_sentiment <- function (mySentiment, myAnnotate) {
         g <- ggplot(data = mySentiment, aes(x = linenumber, y = sentiment)) +
@@ -102,7 +105,7 @@ plot_sentiment <- function (mySentiment, myAnnotate) {
                 theme_minimal() +
                 labs(y = "Sentiment", caption = "Text sourced from Project Gutenberg") +
                 scale_x_discrete(expand=c(0.02,0)) +
-                theme(plot.caption=element_text(size=8)) +
+                #theme(plot.caption=element_text(size=8)) +
                 theme(axis.text.y=element_text(margin=margin(r=-10))) +
                 theme(axis.title.x=element_blank()) +
                 theme(axis.ticks.x=element_blank()) +
@@ -111,3 +114,144 @@ plot_sentiment <- function (mySentiment, myAnnotate) {
 
 ```
 
+##Sentiments of Different Novels
+
+####Pride and Prejudice
+
+```{r, "process sentiment Pride and Prejudice", echo=FALSE}
+
+PP_sentiment <- process_sentiment(prideprejudice, "bing")
+PandPannot <- data.frame(x = c(243, 518, 747, 1005), y = rep(14.9, 4), 
+                           label = c("Ball at Netherfield", "Mr. Darcy proposes", 
+                                     "Lydia elopes", "Mr. Darcy proposes again"), 
+                           y1 = rep(13.5, 4), y2 = c(8.5, 7.5, 7.5, 8.5))
+p <- plot_sentiment(PP_sentiment, PandPannot)
+p + labs(title = expression(paste("Sentiment in ", italic("Pride and Prejudice"))))
+
+
+```
+
+####Mansfield Park
+
+```{r, "process sentiment Mansfield", echo=FALSE}
+
+
+MP_sentiment <- process_sentiment(mansfieldpark, "bing")
+MPannot <- data.frame(x = c(345, 529, 849, 1224), y = rep(14.9, 4), 
+                           label = c("Preparing for the play", "Sir Thomas returns", 
+                                     "Mr. Crawford proposes", "Mr. Crawford's scandal"), 
+                           y1 = rep(13.5, 4), y2 = c(7.8, 10.2, 8.5, 7.5))
+p <- plot_sentiment(MP_sentiment, MPannot)
+p + labs(title = expression(paste("Sentiment in ", italic("Mansfield Park"))))
+
+```
+
+####Emma
+
+```{r, "process sentiment Emma", echo=FALSE}
+
+Emma_sentiment <- process_sentiment(emma, "bing")
+Emmaannot <- data.frame(x = c(95, 345, 772, 1085), y = rep(14.9, 4), 
+                           label = c("Harriet's portrait", "Mr. Elton proposes", 
+                                     "Emma in love with Frank?!", "Emma is a jerk"), 
+                           y1 = rep(13.5, 4), y2 = c(7.8, 8.5, 9.5, 8.2))
+p <- plot_sentiment(Emma_sentiment, Emmaannot)
+p + labs(title = expression(paste("Sentiment in ", italic("Emma"))))
+
+```
+
+####Northanger Abbey
+
+```{r, , "process sentiment Northanger", echo=FALSE}
+
+NA_sentiment <- process_sentiment(northangerabbey, "bing")
+NAannot <- data.frame(x = c(33, 162, 347, 486), y = rep(14.9, 4), 
+                           label = c("Mr. Tilney introduced", "Cotillion ball", 
+                                     "Catherine invited to Northanger Abbey", "Murder?!?!"), 
+                           y1 = rep(13.5, 4), y2 = c(10.3, 8.5, 7.9, 9.1))
+p <- plot_sentiment(NA_sentiment, NAannot)
+p + labs(title = expression(paste("Sentiment in ", italic("Northanger Abbey"))))
+
+```
+
+####Persuasion
+
+```{r, , "process sentiment Persuassion", echo=FALSE}
+
+persuasion_sentiment <- process_sentiment(persuasion, "bing")
+Persannot <- data.frame(x = c(142, 302, 449, 655), y = rep(14.9, 4), 
+                           label = c("Anne & Captain Wentworth meet again", "Louisa jumps/falls", 
+                                     "Captain Wentworth NOT engaged!", "Captain Wentworth's letter"), 
+                           y1 = rep(13.5, 4), y2 = c(9.7, 8.5, 9.5, 8.9))
+p <- plot_sentiment(persuasion_sentiment, Persannot)
+p + labs(title = expression(paste("Sentiment in ", italic("Persuasion"))))
+
+```
+
+
+```{r, , "process sentiment S and S", echo=FALSE}
+SS_sentiment <- process_sentiment(sensesensibility, "bing")
+
+```
+
+##Fourier Filter
+
+```{r, "Define fourier sentiment function", echo=FALSE}
+
+fourier_sentiment <- function (sentiment) {
+        as.numeric(get_transformed_values(sentiment[,2], 
+                                          low_pass_size = 3,
+                                          scale_vals = TRUE,
+                                          scale_range = FALSE))
+}
+
+```
+
+```{r, "calculate plot data", echo=FALSE}
+
+plotshape <- rbind(data_frame(linenumber = 1:100, ft = fourier_sentiment(SS_sentiment)) %>% 
+                           mutate(novel = "Sense and Sensibility"),
+      data_frame(linenumber = 1:100, ft = fourier_sentiment(PP_sentiment)) %>% 
+              mutate(novel = "Pride and Prejudice"),
+      data_frame(linenumber = 1:100, ft = fourier_sentiment(MP_sentiment)) %>% 
+              mutate(novel = "Mansfield Park"),
+      data_frame(linenumber = 1:100, ft = fourier_sentiment(Emma_sentiment)) %>% 
+              mutate(novel = "Emma"),
+      data_frame(linenumber = 1:100, ft = fourier_sentiment(NA_sentiment)) %>% 
+              mutate(novel = "Northanger Abbey"),
+      data_frame(linenumber = 1:100, ft = fourier_sentiment(persuasion_sentiment)) %>% 
+              mutate(novel = "Persuasion"))
+plotshape$novel <- factor(plotshape$novel, levels = c("Sense and Sensibility", 
+                                                      "Pride and Prejudice", 
+                                                      "Mansfield Park",
+                                                      "Emma",
+                                                      "Northanger Abbey",
+                                                      "Persuasion"))
+
+
+```
+
+```{r, "plot fourier", echo=FALSE}
+
+ggplot(data = plotshape, aes(x = linenumber, y = ft, fill = novel)) +
+        geom_area(alpha = 0.7) + 
+        facet_wrap(~novel, nrow = 3) +
+        theme_minimal() +
+        ylab("Transformed Sentiment Value") +
+        labs(title = "Sentiment in Jane Austen's Novels",
+             caption = caption) +
+        scale_fill_viridis(end = 0.4, discrete=TRUE) +
+        scale_x_discrete(expand=c(0,0)) +
+        theme(strip.text=element_text(hjust=0)) +
+        theme(strip.text = element_text(face = "italic")) +
+        theme(axis.text.y=element_text(margin=margin(r=-10))) +
+        #theme(plot.caption=element_text(size=9)) +
+        theme(legend.position="none") +
+        theme(axis.title.x=element_blank()) +
+        theme(axis.ticks.x=element_blank()) +
+        theme(axis.text.x=element_blank())
+
+
+```
+
+###The end
