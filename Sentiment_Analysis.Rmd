@@ -3,7 +3,6 @@ title: "Jane_Austen_Sentiment"
 author: "Winston Saunders"
 date: "May 2016"
 output: html_document
-
 ---
 
 ##Get Data
