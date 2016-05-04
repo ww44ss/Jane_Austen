@@ -9,7 +9,7 @@ This is just a proof of life copy of the nice blog by [Julia Silge](http://julia
 
 ##Get Data
 
-```{r, "load jane austen text", echo=FALSE}
+```{r, "load jane austen text", echo=FALSE, warning=FALSE}
 
 
 library(devtools)
@@ -18,7 +18,7 @@ library(janeaustenr)
 
 ```
 
-```{r, "load libraries and data", echo=FALSE}
+```{r, "load libraries and data", echo=FALSE, warning=FALSE, message=FALSE}
 
 
 
@@ -36,7 +36,7 @@ data(persuasion)
 
 ```
 
-```{r, "functional wrapper for get_sentiment"}
+```{r, "functional wrapper for get_sentiment", echo=FALSE, warning=FALSE}
 
 
 process_sentiment <- function (rawtext, mymethod) {
@@ -49,7 +49,7 @@ process_sentiment <- function (rawtext, mymethod) {
 
 ```
 
-```{r, "process using different methods"}
+```{r, "process using different methods", echo=FALSE, warning=FALSE}
 
 SandS <- rbind(process_sentiment(sensesensibility,"afinn") %>% mutate(method = "AFINN"),
                process_sentiment(sensesensibility,"bing") %>% mutate(method = "Bing et al"),
@@ -60,7 +60,7 @@ SandS <- rbind(process_sentiment(sensesensibility,"afinn") %>% mutate(method = "
 
 ##Different Sentiment Methods _Sense And Sensibility_
 
-```{r, "plot different methods", fig.align='center', fig.height=4, fig.width=8}
+```{r, "plot different methods", fig.align='center', fig.height=4, fig.width=8, echo=FALSE, warning=FALSE}
 
 caption <- "Text sourced from Project Gutenberg"
 annotatetext <- data.frame(x = c(108, 484, 851, 1005), y = rep(19.3, 4), 
@@ -94,7 +94,7 @@ ggplot(data = SandS, aes(x = linenumber, y = sentiment, fill = method)) +
 
 ```
 
-```{r, "define general plotting function", echo=FALSE}
+```{r, "define general plotting function", echo=FALSE, warning=FALSE}
 
 plot_sentiment <- function (mySentiment, myAnnotate) {
         g <- ggplot(data = mySentiment, aes(x = linenumber, y = sentiment)) +
