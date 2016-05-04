@@ -112,3 +112,49 @@ plot_sentiment <- function (mySentiment, myAnnotate) {
 }
 
 ```
+
+##Sentiments of Different Novels
+
+####Pride and Prejudice
+
+```{r, "process sentiment Pride and Prejudice", echo=FALSE}
+
+PP_sentiment <- process_sentiment(prideprejudice, "bing")
+PandPannot <- data.frame(x = c(243, 518, 747, 1005), y = rep(14.9, 4), 
+                           label = c("Ball at Netherfield", "Mr. Darcy proposes", 
+                                     "Lydia elopes", "Mr. Darcy proposes again"), 
+                           y1 = rep(13.5, 4), y2 = c(8.5, 7.5, 7.5, 8.5))
+p <- plot_sentiment(PP_sentiment, PandPannot)
+p + labs(title = expression(paste("Sentiment in ", italic("Pride and Prejudice"))))
+
+
+```
+
+####Mansfield Park
+
+```{r, "process sentiment Mansfield", echo=FALSE}
+
+
+MP_sentiment <- process_sentiment(mansfieldpark, "bing")
+MPannot <- data.frame(x = c(345, 529, 849, 1224), y = rep(14.9, 4), 
+                           label = c("Preparing for the play", "Sir Thomas returns", 
+                                     "Mr. Crawford proposes", "Mr. Crawford's scandal"), 
+                           y1 = rep(13.5, 4), y2 = c(7.8, 10.2, 8.5, 7.5))
+p <- plot_sentiment(MP_sentiment, MPannot)
+p + labs(title = expression(paste("Sentiment in ", italic("Mansfield Park"))))
+
+```
+
+####Emma
+
+```{r, "process sentiment Emma", echo=FALSE}
+
+Emma_sentiment <- process_sentiment(emma, "bing")
+Emmaannot <- data.frame(x = c(95, 345, 772, 1085), y = rep(14.9, 4), 
+                           label = c("Harriet's portrait", "Mr. Elton proposes", 
+                                     "Emma in love with Frank?!", "Emma is a jerk"), 
+                           y1 = rep(13.5, 4), y2 = c(7.8, 8.5, 9.5, 8.2))
+p <- plot_sentiment(Emma_sentiment, Emmaannot)
+p + labs(title = expression(paste("Sentiment in ", italic("Emma"))))
+
+```
