@@ -5,6 +5,8 @@ date: "May 2016"
 output: html_document
 ---
 
+This is just a proof of life copy of the nice blog by [Julia Silge](http://juliasilge.com/blog/If-I-Loved-NLP-Less/)
+
 ##Get Data
 
 ```{r, "load jane austen text", echo=FALSE}
@@ -117,7 +119,7 @@ plot_sentiment <- function (mySentiment, myAnnotate) {
 
 ####Pride and Prejudice
 
-```{r, "process sentiment Pride and Prejudice", echo=FALSE}
+```{r, "process sentiment Pride and Prejudice", fig.align='center', fig.height=3, fig.width=8, echo=FALSE, warning=FALSE}
 
 PP_sentiment <- process_sentiment(prideprejudice, "bing")
 PandPannot <- data.frame(x = c(243, 518, 747, 1005), y = rep(14.9, 4), 
@@ -132,7 +134,7 @@ p + labs(title = expression(paste("Sentiment in ", italic("Pride and Prejudice")
 
 ####Mansfield Park
 
-```{r, "process sentiment Mansfield", echo=FALSE}
+```{r, "process sentiment Mansfield", fig.align='center', fig.height=3, fig.width=8, echo=FALSE, warning=FALSE}
 
 
 MP_sentiment <- process_sentiment(mansfieldpark, "bing")
@@ -147,7 +149,7 @@ p + labs(title = expression(paste("Sentiment in ", italic("Mansfield Park"))))
 
 ####Emma
 
-```{r, "process sentiment Emma", echo=FALSE}
+```{r, "process sentiment Emma", fig.align='center', fig.height=3, fig.width=8, echo=FALSE, warning=FALSE}
 
 Emma_sentiment <- process_sentiment(emma, "bing")
 Emmaannot <- data.frame(x = c(95, 345, 772, 1085), y = rep(14.9, 4), 
@@ -161,7 +163,7 @@ p + labs(title = expression(paste("Sentiment in ", italic("Emma"))))
 
 ####Northanger Abbey
 
-```{r, , "process sentiment Northanger", echo=FALSE}
+```{r, "process sentiment Northanger", fig.align='center', fig.height=3, fig.width=8, echo=FALSE, warning=FALSE}
 
 NA_sentiment <- process_sentiment(northangerabbey, "bing")
 NAannot <- data.frame(x = c(33, 162, 347, 486), y = rep(14.9, 4), 
@@ -175,7 +177,7 @@ p + labs(title = expression(paste("Sentiment in ", italic("Northanger Abbey"))))
 
 ####Persuasion
 
-```{r, , "process sentiment Persuassion", echo=FALSE}
+```{r, "process sentiment Persuassion", fig.align='center', fig.height=3, fig.width=8, echo=FALSE, warning=FALSE}
 
 persuasion_sentiment <- process_sentiment(persuasion, "bing")
 Persannot <- data.frame(x = c(142, 302, 449, 655), y = rep(14.9, 4), 
@@ -188,7 +190,9 @@ p + labs(title = expression(paste("Sentiment in ", italic("Persuasion"))))
 ```
 
 
-```{r, , "process sentiment S and S", echo=FALSE}
+####Sense and Sensibility
+
+```{r, "process sentiment S and S", fig.align='center', fig.height=3, fig.width=8, echo=FALSE, warning=FALSE}
 SS_sentiment <- process_sentiment(sensesensibility, "bing")
 
 ```
@@ -230,7 +234,7 @@ plotshape$novel <- factor(plotshape$novel, levels = c("Sense and Sensibility",
 
 ```
 
-```{r, "plot fourier", echo=FALSE}
+```{r, "plot fourier", fig.align='center', fig.height=5, fig.width=7, echo=FALSE, warning=FALSE}
 
 ggplot(data = plotshape, aes(x = linenumber, y = ft, fill = novel)) +
         geom_area(alpha = 0.7) + 
